@@ -3,6 +3,7 @@ import {
   MeshNameInput,
   QRExchange,
   makeScanPayload,
+  useStorageNamespace,
   type MeshConfig,
   type YRoom,
 } from "@baditaflorin/mesh-common";
@@ -12,7 +13,7 @@ type Props = { room: YRoom | null; config: MeshConfig };
 type Profile = { name: string; about: string; lookingFor: string };
 type Vote = { from: string; to: string; like: boolean };
 
-const KEY = (p: string, k: string) => `${p}:bd:${k}`;
+const KEY = (k: string) => `bd:${k}`;
 
 export function Feature({ room, config }: Props) {
   if (!room) {
@@ -27,30 +28,22 @@ export function Feature({ room, config }: Props) {
 }
 
 function Body({ room, config }: { room: YRoom; config: MeshConfig }) {
-  const [name, setName] = useState(
-    () => localStorage.getItem(KEY(config.storagePrefix, "name")) ?? "",
-  );
-  const [about, setAbout] = useState(
-    () => localStorage.getItem(KEY(config.storagePrefix, "about")) ?? "",
-  );
-  const [lookingFor, setLookingFor] = useState(
-    () => localStorage.getItem(KEY(config.storagePrefix, "lookingFor")) ?? "",
-  );
+  const ns = useStorageNamespace(config.storagePrefix);
+  const [name, setName] = useState(() => ns.get<string>(KEY("name")) ?? "");
+  const [about, setAbout] = useState(() => ns.get<string>(KEY("about")) ?? "");
+  const [lookingFor, setLookingFor] = useState(() => ns.get<string>(KEY("lookingFor")) ?? "");
   const [revealMutual, setRevealMutual] = useState(false);
   const [, rerender] = useState(0);
 
-  useEffect(
-    () => localStorage.setItem(KEY(config.storagePrefix, "name"), name),
-    [name, config.storagePrefix],
-  );
-  useEffect(
-    () => localStorage.setItem(KEY(config.storagePrefix, "about"), about),
-    [about, config.storagePrefix],
-  );
-  useEffect(
-    () => localStorage.setItem(KEY(config.storagePrefix, "lookingFor"), lookingFor),
-    [lookingFor, config.storagePrefix],
-  );
+  useEffect(() => {
+    ns.set(KEY("name"), name);
+  }, [name, ns]);
+  useEffect(() => {
+    ns.set(KEY("about"), about);
+  }, [about, ns]);
+  useEffect(() => {
+    ns.set(KEY("lookingFor"), lookingFor);
+  }, [lookingFor, ns]);
 
   useEffect(() => {
     const ps = room.doc.getMap<Profile>("profiles");
