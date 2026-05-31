@@ -1,7 +1,7 @@
 # mesh-blind-date
 
 [![pages](https://img.shields.io/badge/live-baditaflorin.github.io%2Fmesh-blind-date-f472b6)](https://baditaflorin.github.io/mesh-blind-date/)
-[![version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/baditaflorin/mesh-blind-date/blob/main/package.json)
+[![version](https://img.shields.io/badge/version-0.1.1-blue)](https://github.com/baditaflorin/mesh-blind-date/blob/main/package.json)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 > Speed-dating style rotation — fill a profile, system reveals mutual interest at end
